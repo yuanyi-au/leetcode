@@ -222,3 +222,30 @@ var generateParenthesis = function(n) {
     return ans;
 };
 ```
+
+### 394. 字符串解码
+
+```
+var decodeString = function(s) {
+    let numStack = [];
+    let strStack = [];
+    let num = 0;
+    let result = '';
+    for (const str of s) {
+        if (!isNaN(str)) {
+            num = num * 10 + Number(str); // 算出倍数
+        } else if (str == '[') {
+            strStack.push(result); //遇到左括号字符入栈
+            result = ''; // 入栈后清零
+            numStack.push(num); //倍数入栈
+            num = 0; // 入栈后清零
+        } else if (str == ']') {  // 遇到右括号两个栈顶出栈
+            let repeatTimes = numStack.pop(); // 获取拷贝次数
+            result = strStack.pop() + result.repeat(repeatTimes); //构建子串
+        } else {                   
+            result += str; //如果后面的还是字母，追加给result串
+        }
+    }
+    return result;
+};
+```

@@ -175,3 +175,17 @@ var numTrees = function(n) {
     return dp[n];
 };
 ```
+
+### 105. 从前序与中序遍历序列构造二叉树
+
+```
+var buildTree = function(preorder, inorder) {
+    if (!inorder.length) return null;
+    let node = new TreeNode(preorder[0]); //创建根节点
+    let mid = inorder.indexOf(preorder.shift()) //preoder[0]对应inorder中的位置
+    //左右子树递归
+    node.left = buildTree(preorder, inorder.slice(0, mid));
+    node.right = buildTree(preorder, inorder.slice(mid + 1));
+    return node;
+};
+```

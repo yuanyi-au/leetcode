@@ -98,3 +98,26 @@ var hasCycle = function(head) {
 
 //标准解法是快慢指针，慢指针每次移动一步，快指针每次移动两步，看是否相遇
 ```
+
+## 中等
+
+### 2. 两数相加
+
+```
+var addTwoNumbers = function(l1, l2) {
+    let addOne = 0; //表示进位
+    let sum = new ListNode('0');
+    let head = sum;
+    while (addOne || l1 || l2) {
+        let val1 = l1 !== null ? l1.val : 0;
+        let val2 = l2 !== null ? l2.val : 0;
+        let r1 = val1 + val2 + addOne; //求和
+        addOne = r1 >= 10 ? 1 : 0; //进位
+        sum.next = new ListNode(r1 % 10);
+        sum = sum.next;
+        if (l1) l1 = l1.next;
+        if (l2) l2 = l2.next;
+    }
+    return head.next; //head中保存的第一个节点是刚开始定义的“0”
+};
+```

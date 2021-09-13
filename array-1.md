@@ -31,6 +31,25 @@ var twoSum = function(nums, target) {
 
 ```
 
+### 88. 合并两个有序数组
+
+```
+//双指针
+var merge = function(nums1, m, nums2, n) {
+    let i = 0, j = 0;
+    nums1.splice(m);
+    while (j < n) {
+        //如果第一个数组遍历完成，或者对应位置上数组2的值小于数组1的值，执行插入
+        if (i >= (m+n) || nums2[j] <= nums1[i]) {
+            nums1.splice(i, 0, nums2[j]); //在[i]位置添加nums2[j]
+            j++;
+        }
+        i++;
+    }
+    return nums1;
+};
+```
+
 ### 121. 买卖股票的最佳时机
 
 ```
@@ -71,7 +90,7 @@ var maxSubArray = function(nums) {
 ### 448. 找到所有数组中消失的数字
 
 ```
-//6780ms的解法 :sweat_smile:
+//暴力6780ms :sweat_smile:
 var findDisappearedNumbers = function(nums) {
     let res = [];
     for (let i=1; i<=nums.length; i++) {
