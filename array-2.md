@@ -2,10 +2,83 @@
 
 ## 中等
 
+### 912. 排序数组
+
+```
+//这是可以的吗.jpg [124ms, 97%, 61%]
+var sortArray = function(nums) {
+    nums.sort((a,b) => a-b);
+    return nums;
+};
+```
+```
+//快速排序 [172ms, 72%, 22%]
+var sortArray = function(nums) {
+    if(nums.length < 2) return nums; //必须有这步
+    let left = [];
+    let right = [];
+    let mid  = Math.floor(nums.length / 2);
+    let target =  nums.splice(mid,1)[0]; //写成 target = nums[mid] 不知道为什么执行会出错
+    for(let i = 0; i < nums.length; i++ ){
+        if(nums[i] <= target){
+            left.push(nums[i])
+        }else{
+            right.push(nums[i])
+        }
+    }
+    return sortArray(left).concat(target, sortArray(right))
+};
+```
+```
+//冒泡排序 [7220ms, 9%, 95%]
+var sortArray = function(nums) {
+    for (let i=0; i<nums.length-1; i++) {
+        for (let j=i+1; j<nums.length; j++) {
+            if (nums[i] > nums[j]) {
+                let temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+            }
+        }
+    }
+    return nums;
+};
+```
+```
+//选择排序 [7628ms, 7%, 85%]
+var sortArray = function(nums) {
+    for (let i=0; i<nums.length; i++) {
+        for (let j=i+1; j<nums.length; j++) {
+            if (nums[i] > nums[j]) {
+                temp = nums[j];
+                nums[j] = nums[i];
+                nums[i] = temp;
+            }
+        }
+    }
+    return nums;
+};
+```
+```
+//插入排序 [1748ms, 42%, 88%]
+var sortArray = function(nums) {
+  for (let i=1; i<nums.length; i++) {
+      let temp = nums[i];
+      let j = i;
+      while(j > 0 && nums[j-1] > temp){
+            nums[j] = nums[j-1];
+            j--;
+        }
+      nums[j] = temp;
+  }
+  return nums;
+};
+```
+
 ### 215. 数组中的第K个最大元素
 
 ```
-//我看人家正常做法是用快排或者堆排序:sweat_smile: 之后再看看
+//人家正常做法是用快排或者堆排序😅 之后再看看
 var findKthLargest = function(nums, k) {
     arr = nums.sort((a,b) => b-a)
     return arr[k-1];
@@ -35,6 +108,34 @@ var permute = function(nums) {
         }
     }
     backtracking(nums, nums.length, []);
+    return ans;
+};
+```
+
+### 93. 复原 IP 地址
+
+```
+//回溯
+var restoreIpAddresses = function(s) {
+    let ans = [], path = [];
+    function backtracking(i) {
+        let len = path.length;
+        if(len>4) return;
+        //划分为4段
+        if(len === 4 && i === s.length) {
+            ans.push(path.join("."));
+            return;
+        }
+        for(let j=i; j<s.length; j++) {
+            let str = s.substr(i, j-i+1);
+            if(str.length > 3 || +str > 255) break;
+            if(str.length > 1 && str[0] === "0") break;
+            path.push(str);
+            backtracking(j+1);
+            path.pop();
+        }
+    }
+    backtracking(0, 0);
     return ans;
 };
 ```
@@ -71,6 +172,33 @@ var threeSum = function(nums) {
         }
     }
     return result;
+};
+```
+
+### 16. 最接近的三数之和
+
+```
+var threeSumClosest = function(nums, target) {
+    let min = Infinity;
+    let ans = 0;
+    nums.sort((a,b) => a-b);
+    for (let i=0; i<nums.length; i++) {
+        let left = i + 1;
+        let right = nums.length - 1;
+        while (left<right) {
+            let sum = nums[i] + nums[left] + nums[right];
+            if (Math.abs(sum-target) < min) {
+                min = Math.abs(sum-target);
+                ans = sum;
+            } 
+            if (sum < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+    }
+    return ans;
 };
 ```
 
@@ -231,79 +359,27 @@ var numIslands = function(grid) {
 };
 ```
 
-
-## 困难
-
-### 42. 接雨水
+### 560. 和为 K 的子数组
 
 ```
-//暴力，272ms
-//找当前位置左右的高度最大值，其中较小的那个减去当前高度就是雨水量
-var trap = function(height) {
-    let ans = 0;
-    for (let i = 0; i<height.length; i++) {
-        let leftMax = 0, rightMax = 0;
-        for (let j=i; j>=0; j--) {
-            leftMax = Math.max(leftMax,height[j])
+//暴力法超时，用 map 储存前缀和
+var subarraySum = function(nums, k) {
+    let count = 0;
+    let map = { 0: 1 };
+    let preSum = 0;
+    for (let i=0; i<nums.length; i++) {
+        preSum += nums[i];
+        //如果map中存在key为(当前前缀和-k)，说明之前的前缀和为k
+        if (map[preSum - k]) { 
+            count += map[preSum - k]
         }
-        for (let j=i; j<height.length; j++) {
-            rightMax = Math.max(rightMax, height[j])
-        }
-        ans += Math.min(leftMax, rightMax) - height[i];
-    }
-    return ans;
-};
-
-//双指针，76ms
-var trap = function(height) {
-    let ans = 0;
-    let left = 0, right = height.length - 1;
-    let leftMax = 0, rightMax = 0;
-    while (left < right) {
-        leftMax = Math.max(leftMax, height[left]);
-        rightMax = Math.max(rightMax, height[right]);
-        if (height[left] < height[right]) {
-            ans += leftMax - height[left];
-            ++left;
+        //计算每一项前缀和，以键值对存入map
+        if (map[preSum]) {
+            map[preSum]++;
         } else {
-            ans += rightMax - height[right];
-            --right;
+            map[preSum] = 1;
         }
     }
-    return ans;
+    return count;
 };
-```
-
-
-## 非力扣题
-
-### 数组扁平化
-
-```
-//ES6 flat()
-var arr = [1, [2, 3,[4, [5]]]];
-arr.flat(Infinity); //[1, 2, 3, 4, 5]
-
-//for 循环递归
-var arr = [1, [2, 3,[4, [5]]]];
-function flattern(arr) {
-    let res = [];
-	for (let i=0; i<arr.length; i++){
-		if (Array.isArray(arr[i])) {
-			res = res.concat(flattern(arr[i])); 
-			//或者用扩展运算符 res.push(...flattern(arr[i]))
-		} else {
-			res.push(arr[i]);
-		}
-	}
-	return res;
-}
-
-//reduce() 方法
-var arr = [1, [2, 3,[4, [5]]]];
-function flattern(arr) {
-	return arr.reduce((res, next) => {
-		reurn res.concat(Array.isArray(next)? flattern(next) : next);
-	}, []);
-}
 ```

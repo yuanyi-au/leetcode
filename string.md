@@ -223,6 +223,29 @@ var generateParenthesis = function(n) {
 };
 ```
 
+### 1190. 反转每对括号间的子串
+
+```
+// 遇到左括号就入栈，遇到右括号就出栈
+var reverseParentheses = function(s) {
+    const stack = [];
+    let reverseStr = '';
+    for (let str of s) {
+        if (str == '(') {
+            stack.push(reverseStr);
+            reverseStr = '';
+        } else if (str == ')') {
+            reverseStr = reverseStr.split("").reverse().join("");
+            reverseStr = stack[stack.length - 1] + reverseStr;
+            stack.pop();
+        } else {
+            reverseStr += str;
+        }
+    }
+    return reverseStr;
+};
+```
+
 ### 394. 字符串解码
 
 ```

@@ -90,7 +90,7 @@ var maxSubArray = function(nums) {
 ### 448. 找到所有数组中消失的数字
 
 ```
-//暴力6780ms :sweat_smile:
+//暴力6780ms😅
 var findDisappearedNumbers = function(nums) {
     let res = [];
     for (let i=1; i<=nums.length; i++) {

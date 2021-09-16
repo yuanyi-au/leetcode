@@ -121,3 +121,39 @@ var addTwoNumbers = function(l1, l2) {
     return head.next; //head中保存的第一个节点是刚开始定义的“0”
 };
 ```
+
+### 143. 重排链表
+
+```
+var reorderList = function(head) {
+    let node = head;
+    //用数组把节点储存下来
+    let list = [];
+    while (node) {
+        list.push(node);
+        node = node.next;
+    }
+    //双指针遍历
+    let i = 1, j = list.length - 1;
+    head.next = null;
+    let current = head;
+    while (i<j) {
+        list[j].next = list[i];
+        list[i].next = null;
+        current.next = list[j];
+        current = list[i];
+        i++; j--;
+    }
+    if (i===j) {
+        list[i].next = null;
+        current.next = list[i];
+    }
+    return list;
+}; 
+```
+
+### 92. 反转链表 II
+
+```
+
+```
