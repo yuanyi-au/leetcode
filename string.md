@@ -1,4 +1,21 @@
 # LeetCode 题解 - 字符串
+- [LeetCode 题解 - 字符串](#leetcode-题解---字符串)
+  - [简单](#简单)
+    - [415. 字符串相加](#415-字符串相加)
+    - [9. 回文数](#9-回文数)
+    - [14. 最长公共前缀](#14-最长公共前缀)
+    - [13. 罗马数字转整数](#13-罗马数字转整数)
+    - [20. 有效的括号](#20-有效的括号)
+    - [58. 最后一个单词的长度](#58-最后一个单词的长度)
+  - [中等](#中等)
+    - [139. 单词拆分](#139-单词拆分)
+    - [3. 无重复字符的最长子串](#3-无重复字符的最长子串)
+    - [5. 最长回文子串](#5-最长回文子串)
+    - [93. 复原 IP 地址](#93-复原-ip-地址)
+    - [22. 括号生成](#22-括号生成)
+    - [1190. 反转每对括号间的子串](#1190-反转每对括号间的子串)
+    - [394. 字符串解码](#394-字符串解码)
+    - [43. 字符串相乘](#43-字符串相乘)
 
 ## 简单
 
@@ -22,13 +39,34 @@ var addStrings = function(num1, num2) {
 };
 ```
 
+### 9. 回文数
+
+```
+//双指针
+var isPalindrome = function(x) {
+    if (x<0) return false;
+    let num = x.toString();
+    let i=0; 
+    let j=num.length-1;
+    while (i<j) {
+        if (num[i] !== num[j]) return false;
+        i++; j--;
+    } 
+    return true;
+};
+
+//reverse
+var isPalindrome = function(x) {
+    let rev = x.toString().split("").reverse().join("");
+    if (rev == x) return true;
+    else return false;
+};
+```
+
 ### 14. 最长公共前缀
 
 ```
 var longestCommonPrefix = function(strs) {
-    if (strs.length == 0) {
-        return "";
-    }
     let row = strs.length;
     let col = strs[0].length;
     for (let i=0; i<col; i++) {
@@ -100,6 +138,22 @@ var isValid = function(s) {
         }
     }
     return !stack.length
+};
+```
+
+### 58. 最后一个单词的长度
+
+```
+var lengthOfLastWord = function(s) {
+    let str = s.split("").reverse().join("");
+    let count = 0;
+    let i=0;
+    while (i<str.length && str[i] == " ") i++;
+    while (i<str.length && str[i] !== " ") {
+        count++;
+        i++;
+    }
+    return count;
 };
 ```
 
@@ -197,6 +251,34 @@ var longestPalindrome = function(s) {
 };
 ```
 
+### 93. 复原 IP 地址
+
+```
+//回溯
+var restoreIpAddresses = function(s) {
+    let ans = [], path = [];
+    function backtracking(i) {
+        let len = path.length;
+        if(len>4) return;
+        //划分为4段
+        if(len === 4 && i === s.length) {
+            ans.push(path.join("."));
+            return;
+        }
+        for(let j=i; j<s.length; j++) {
+            let str = s.substr(i, j-i+1);
+            if(str.length > 3 || str > 255) break;
+            if(str.length > 1 && str[0] === "0") break;
+            path.push(str);
+            backtracking(j+1);
+            path.pop();
+        }
+    }
+    backtracking(0, 0);
+    return ans;
+};
+```
+
 ### 22. 括号生成
 
 ```
@@ -272,3 +354,25 @@ var decodeString = function(s) {
     return result;
 };
 ```
+
+### 43. 字符串相乘
+
+```
+var multiply = function(num1, num2) {
+    if (num1 === '0' || num2 === '0') return '0'
+    let l1 = num1.length, l2 = num2.length, pos = new Array(l1 + l2).fill(0)
+    for (let i = l1; i--;) {
+        for (let j = l2; j--;) {
+            let tmp = num1[i] * num2[j] + pos[i + j + 1]
+            pos[i + j + 1] = tmp % 10   //个位取模
+            pos[i + j] += 0 | tmp / 10  //十位取整
+        } 
+    }
+    //删除多余的0
+    while(pos[0] === 0) {
+        pos.shift()
+    }
+    return pos.join('')
+};
+```
+

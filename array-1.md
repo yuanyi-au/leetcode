@@ -1,4 +1,20 @@
 # LeetCode 题解 - 数组（1）
+- [LeetCode 题解 - 数组（1）](#leetcode-题解---数组1)
+  - [简单](#简单)
+    - [1. 两数之和](#1-两数之和)
+    - [88. 合并两个有序数组](#88-合并两个有序数组)
+    - [121. 买卖股票的最佳时机](#121-买卖股票的最佳时机)
+    - [53. 最大子序和](#53-最大子序和)
+    - [217. 存在重复元素](#217-存在重复元素)
+    - [448. 找到所有数组中消失的数字](#448-找到所有数组中消失的数字)
+    - [704. 二分查找](#704-二分查找)
+    - [278. 第一个错误的版本](#278-第一个错误的版本)
+    - [35. 搜索插入位置](#35-搜索插入位置)
+    - [27. 移除元素](#27-移除元素)
+    - [26. 删除有序数组中的重复项](#26-删除有序数组中的重复项)
+    - [283. 移动零](#283-移动零)
+    - [169. 多数元素](#169-多数元素)
+    - [136. 只出现一次的数字](#136-只出现一次的数字)
 
 ## 简单
 
@@ -7,13 +23,12 @@
 ```
 //暴力
 var twoSum = function(nums, target) {
-    for(let i=0; i<nums.length; i++){
-        let x = nums.indexOf(target - nums[i]);
-            if (x != -1 && x != i){ 
-                return [i, x]    
-            }
+    for (let i=0; i<nums.length; i++) {
+        let index = nums.indexOf(target - nums[i]);
+        if (index != -1 && index != i){ 
+            return [i, index]  
+        }
     }
-    throw Error('No match')
 };
 
 //哈希表
@@ -24,9 +39,8 @@ var twoSum = function(nums, target) {
         if (map.has(key)) {
             return [map.get(key), i]
         }
-        map.set(nums[i], i)
+        map.set(nums[i], i); // 边读边存
     }
-    throw Error('No match')
 };
 
 ```
@@ -87,6 +101,17 @@ var maxSubArray = function(nums) {
 };
 ```
 
+### 217. 存在重复元素
+
+```
+//Set 去重
+var containsDuplicate = function(nums) {
+    let n = new Set(nums)
+    if (n.size == nums.length) return false;
+    else return true;
+};
+```
+
 ### 448. 找到所有数组中消失的数字
 
 ```
@@ -134,6 +159,22 @@ var search = function(nums, target) {
         } 
     }
     return -1;
+};
+```
+
+### 278. 第一个错误的版本
+
+```
+//二分法
+return function(n) {
+    let left = 1; right = n;
+    while(left<right) {
+        let mid = Math.floor(left + (right-left) / 2);
+        if (isBadVersion(mid) == true) {
+            right = mid;
+        } else left = mid + 1;
+    }
+    return left;
 };
 ```
 

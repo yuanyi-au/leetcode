@@ -1,4 +1,15 @@
 # LeetCode 题解 - 链表
+- [LeetCode 题解 - 链表](#leetcode-题解---链表)
+  - [简单](#简单)
+    - [21. 合并两个有序链表](#21-合并两个有序链表)
+    - [206. 反转链表](#206-反转链表)
+    - [234. 回文链表](#234-回文链表)
+    - [160. 相交链表](#160-相交链表)
+    - [141. 环形链表](#141-环形链表)
+  - [中等](#中等)
+    - [2. 两数相加](#2-两数相加)
+    - [143. 重排链表](#143-重排链表)
+    - [92. 反转链表 II](#92-反转链表-ii)
 
 ## 简单
 
@@ -155,5 +166,24 @@ var reorderList = function(head) {
 ### 92. 反转链表 II
 
 ```
-
+//头插法
+var reverseBetween = function(head, left, right) {
+    // 设置dummyNode（虚拟头节点）是这一类问题的一般做法
+    const dummyNode = new ListNode(-1);
+    dummyNode.next = head;
+    let pre = dummyNode; //pre为left前一个节点
+    //从虚拟头节点走left - 1 步，到left前面一个节点
+    for (let i=0; i<left-1; i++) {
+        pre = pre.next;
+    }
+    //从pre走走 right - left + 1 步，到cur节点
+    let cur = pre.next; //cur为待反转区域的第一个节点left
+    for (let i=0; i<right-left; i++) {
+        const next = cur.next; //next为cur的下一个节点
+        cur.next = next.next; //把 curr 的下一个节点指向 next 的下一个节点
+        next.next = pre.next; //把 next 的下一个节点指向 pre 的下一个节点
+        pre.next = next; //把 pre 的下一个节点指向 next
+    }
+    return dummyNode.next;
+};
 ```

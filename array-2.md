@@ -1,4 +1,22 @@
 # LeetCode 题解 - 数组（2）
+- [LeetCode 题解 - 数组（2）](#leetcode-题解---数组2)
+  - [中等](#中等)
+    - [912. 排序数组](#912-排序数组)
+    - [128. 最长连续序列](#128-最长连续序列)
+    - [215. 数组中的第K个最大元素](#215-数组中的第k个最大元素)
+    - [46. 全排列](#46-全排列)
+    - [15. 三数之和](#15-三数之和)
+    - [16. 最接近的三数之和](#16-最接近的三数之和)
+    - [螺旋矩阵](#螺旋矩阵)
+    - [55. 跳跃游戏](#55-跳跃游戏)
+    - [45. 跳跃游戏 II](#45-跳跃游戏-ii)
+    - [152. 乘积最大子数组](#152-乘积最大子数组)
+    - [56. 合并区间](#56-合并区间)
+    - [739. 每日温度](#739-每日温度)
+    - [11. 盛最多水的容器](#11-盛最多水的容器)
+    - [200. 岛屿数量](#200-岛屿数量)
+    - [560. 和为 K 的子数组](#560-和为-k-的子数组)
+    - [611. 有效三角形的个数](#611-有效三角形的个数)
 
 ## 中等
 
@@ -75,6 +93,46 @@ var sortArray = function(nums) {
 };
 ```
 
+### 128. 最长连续序列
+
+```
+//排序，set 去重
+var longestConsecutive = function(nums) {
+    if (nums.length === 0) return 0;
+    nums.sort((a,b) => a-b);
+    let arr = Array.from(new Set(nums))
+    let count = 1;
+    let maxCount = 1;
+    for (let i=0; i<arr.length-1; i++) {
+        if (arr[i+1] == arr[i] + 1) {
+            count++；
+            maxCount = Math.max(maxCount, count);
+        } else {
+            maxCount = Math.max(maxCount, count);
+            count = 1；
+        }
+    }
+    return maxCount;
+};
+
+//set
+var longestConsecutive = function(nums) {
+    if (nums.length === 0) return 0;
+    const set = new Set(nums)
+    let ans = 1;
+    for (let i of set) {
+        if (set.has(i-1)) continue
+        let count = 1; i++;
+        while (set.has(i)) {
+            count++;
+            i++;
+        }
+        ans = Math.max(ans, count)；
+    }
+    return ans;
+};
+```
+
 ### 215. 数组中的第K个最大元素
 
 ```
@@ -108,34 +166,6 @@ var permute = function(nums) {
         }
     }
     backtracking(nums, nums.length, []);
-    return ans;
-};
-```
-
-### 93. 复原 IP 地址
-
-```
-//回溯
-var restoreIpAddresses = function(s) {
-    let ans = [], path = [];
-    function backtracking(i) {
-        let len = path.length;
-        if(len>4) return;
-        //划分为4段
-        if(len === 4 && i === s.length) {
-            ans.push(path.join("."));
-            return;
-        }
-        for(let j=i; j<s.length; j++) {
-            let str = s.substr(i, j-i+1);
-            if(str.length > 3 || +str > 255) break;
-            if(str.length > 1 && str[0] === "0") break;
-            path.push(str);
-            backtracking(j+1);
-            path.pop();
-        }
-    }
-    backtracking(0, 0);
     return ans;
 };
 ```
@@ -272,6 +302,25 @@ var jump = function(nums) {
 };
 ```
 
+### 152. 乘积最大子数组
+
+```
+//动态规划
+var maxProduct = function(nums) {
+    let ans = nums[0];
+    let max = nums[0];
+    let min = nums[0]; //处理负数
+    for (let i=1; i<nums.length; i++) {
+        tempMin = min * nums[i];
+        tempMax = max * nums[i];
+        min = Math.min(tempMin, tempMax, nums[i]);
+        max = Math.max(tempMin, tempMax, nums[i]);
+        ans = Math.max(max, ans);
+    }
+    return ans;
+};
+```
+
 ### 56. 合并区间
 
 ```
@@ -381,5 +430,26 @@ var subarraySum = function(nums, k) {
         }
     }
     return count;
+};
+```
+
+### 611. 有效三角形的个数
+
+```
+var triangleNumber = function(nums) {
+    nums.sort((a,b) => a-b);
+    let ans = 0;
+    for (let k=nums.length-1; k>=2; k--) {
+        let left = 0, right = k - 1;
+        while (left < right) {
+            if (nums[left] + nums[right] > nums[k]) {
+                ans += right - left;
+                right--;
+            } else {
+                left++;
+            }
+        }
+    }
+    return ans;
 };
 ```

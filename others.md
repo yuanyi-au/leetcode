@@ -1,6 +1,13 @@
 # LeetCode 题解 - 其他
+- [LeetCode 题解 - 其他](#leetcode-题解---其他)
+  - [简单](#简单)
+    - [70. 爬楼梯](#70-爬楼梯)
+    - [7. 整数反转](#7-整数反转)
+    - [Excel表列名称](#excel表列名称)
 
-## 70. 爬楼梯
+## 简单
+
+### 70. 爬楼梯
 
 ```
 var climbStairs = function(n) {
@@ -16,7 +23,19 @@ var climbStairs = function(n) {
 };
 ```
 
-##  Excel表列名称
+### 7. 整数反转
+
+```
+var reverse = function(x) {
+    let n = parseInt(x.toString().split("").reverse().join(""));
+    if (x < 0) n = -n;
+    if (n > (2**31-1) || n < -(2**31)) return 0;
+    return n;
+};
+```
+
+
+###  Excel表列名称
 
 ```
 var convertToTitle = function(n) {
